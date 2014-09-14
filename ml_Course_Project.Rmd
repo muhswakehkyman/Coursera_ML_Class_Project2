@@ -1,8 +1,5 @@
----
-title: "Practical Machine Learning Course Project"
-date: "Sunday, September 14, 2014"
-output: html_document
----
+Practical Machine Learning Course Project
+-------------------------------------------------
 
 The goal of this project was to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants and accurately predict how the lift was performed. In the data set this would be the 'classe' variable.
 
@@ -56,7 +53,7 @@ randomForest(x, y, ntree=ntree)
 
 Results
 ---------------------------
-The random forest model's results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.4% accurate. We'd expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.8%.
+The random forest model's results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.3% accurate. We'd expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.5% and 0.9%.
 
 Given these results, I am satisfied with this random forest model especially given how it was optimized for run time on my computer by using only a small portion of the data set. 
 ```{r,echo=TRUE, message=FALSE, warning=FALSE}
