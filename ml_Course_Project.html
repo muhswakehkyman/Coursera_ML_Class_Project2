@@ -99,7 +99,7 @@ randomForest(x, y, ntree=ntree)
 </div>
 <div id="results" class="section level2">
 <h2>Results</h2>
-<p>The random forest model’s results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.5% accurate. We’d expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.7%.</p>
+<p>The random forest model’s results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.4% accurate. We’d expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.8%.</p>
 <p>Given these results, I am satisfied with this random forest model especially given how it was optimized for run time on my computer by using only a small portion of the data set.</p>
 <pre class="r"><code>predictions1 &lt;- predict(rf, newdata=training)
 confusionMatrix(predictions1,training$classe)</code></pre>
@@ -140,36 +140,36 @@ confusionMatrix(predictions2,crossv$classe)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 2232    7    0    0    0
-##          B    0 1510   14    0    0
-##          C    0    1 1354   10    1
-##          D    0    0    0 1275    3
-##          E    0    0    0    1 1438
+##          A 2231    7    0    0    0
+##          B    0 1505    7    0    0
+##          C    0    6 1360   12    0
+##          D    0    0    1 1272   11
+##          E    1    0    0    2 1431
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.995         
-##                  95% CI : (0.994, 0.997)
+##                Accuracy : 0.994         
+##                  95% CI : (0.992, 0.996)
 ##     No Information Rate : 0.284         
 ##     P-Value [Acc &gt; NIR] : &lt;2e-16        
 ##                                         
-##                   Kappa : 0.994         
+##                   Kappa : 0.992         
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             1.000    0.995    0.990    0.991    0.997
-## Specificity             0.999    0.998    0.998    1.000    1.000
-## Pos Pred Value          0.997    0.991    0.991    0.998    0.999
-## Neg Pred Value          1.000    0.999    0.998    0.998    0.999
+## Sensitivity             1.000    0.991    0.994    0.989    0.992
+## Specificity             0.999    0.999    0.997    0.998    1.000
+## Pos Pred Value          0.997    0.995    0.987    0.991    0.998
+## Neg Pred Value          1.000    0.998    0.999    0.998    0.998
 ## Prevalence              0.284    0.193    0.174    0.164    0.184
-## Detection Rate          0.284    0.192    0.173    0.163    0.183
-## Detection Prevalence    0.285    0.194    0.174    0.163    0.183
-## Balanced Accuracy       0.999    0.996    0.994    0.995    0.999</code></pre>
+## Detection Rate          0.284    0.192    0.173    0.162    0.182
+## Detection Prevalence    0.285    0.193    0.176    0.164    0.183
+## Balanced Accuracy       0.999    0.995    0.996    0.994    0.996</code></pre>
 </div>
-<div id="testing-set-predictions-and-courersa-submission-code" class="section level2">
-<h2>Testing Set Predictions and Courersa Submission Code</h2>
+<div id="testing-set-predictions-and-coursera-submission-code" class="section level2">
+<h2>Testing Set Predictions and Coursera Submission Code</h2>
 <p>Below is the submission results using the Coursera provided code.</p>
 <pre class="r"><code>answers = predict(rf, newdata=testing)
 pml_write_files = function(x){

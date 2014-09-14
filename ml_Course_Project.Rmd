@@ -54,7 +54,7 @@ randomForest(x, y, ntree=ntree)
 
 Results
 ---------------------------
-The random forest model's results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.5% accurate. We'd expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.7%.
+The random forest model's results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.4% accurate. We'd expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.8%.
 
 Given these results, I am satisfied with this random forest model especially given how it was optimized for run time on my computer by using only a small portion of the data set. 
 ```{r}
@@ -65,7 +65,7 @@ predictions2 <- predict(rf, newdata=crossv)
 confusionMatrix(predictions2,crossv$classe)
 ```
 
-Testing Set Predictions and Courersa Submission Code
+Testing Set Predictions and Coursera Submission Code
 -----------------------------------------------------
 Below is the submission results using the Coursera provided code.
 ```{r}
