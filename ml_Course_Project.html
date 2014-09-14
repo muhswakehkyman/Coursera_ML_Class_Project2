@@ -102,6 +102,13 @@ randomForest(x, y, ntree=ntree)
 <p>Given these results, I am satisfied with this random forest model especially given how it was optimized for run time on my computer by using only a small portion of the data set.</p>
 <pre class="r"><code>predictions1 &lt;- predict(rf, newdata=training)
 confusionMatrix(predictions1,training$classe)</code></pre>
+<pre><code>## Warning: package 'e1071' was built under R version 3.1.1</code></pre>
+<pre><code>## 
+## Attaching package: 'e1071'
+## 
+## The following object is masked from 'package:Hmisc':
+## 
+##     impute</code></pre>
 <pre><code>## Confusion Matrix and Statistics
 ## 
 ##           Reference
@@ -139,33 +146,33 @@ confusionMatrix(predictions2,crossv$classe)</code></pre>
 ## 
 ##           Reference
 ## Prediction    A    B    C    D    E
-##          A 2231   10    0    0    0
-##          B    1 1506   14    0    0
-##          C    0    2 1354   18    2
-##          D    0    0    0 1268    1
-##          E    0    0    0    0 1439
+##          A 2230    8    0    0    0
+##          B    2 1506   11    0    0
+##          C    0    4 1357    7    2
+##          D    0    0    0 1279    2
+##          E    0    0    0    0 1438
 ## 
 ## Overall Statistics
 ##                                         
-##                Accuracy : 0.994         
-##                  95% CI : (0.992, 0.995)
+##                Accuracy : 0.995         
+##                  95% CI : (0.994, 0.997)
 ##     No Information Rate : 0.284         
 ##     P-Value [Acc &gt; NIR] : &lt;2e-16        
 ##                                         
-##                   Kappa : 0.992         
+##                   Kappa : 0.994         
 ##  Mcnemar's Test P-Value : NA            
 ## 
 ## Statistics by Class:
 ## 
 ##                      Class: A Class: B Class: C Class: D Class: E
-## Sensitivity             1.000    0.992    0.990    0.986    0.998
-## Specificity             0.998    0.998    0.997    1.000    1.000
-## Pos Pred Value          0.996    0.990    0.984    0.999    1.000
-## Neg Pred Value          1.000    0.998    0.998    0.997    1.000
+## Sensitivity             0.999    0.992    0.992    0.995    0.997
+## Specificity             0.999    0.998    0.998    1.000    1.000
+## Pos Pred Value          0.996    0.991    0.991    0.998    1.000
+## Neg Pred Value          1.000    0.998    0.998    0.999    0.999
 ## Prevalence              0.284    0.193    0.174    0.164    0.184
-## Detection Rate          0.284    0.192    0.173    0.162    0.183
-## Detection Prevalence    0.286    0.194    0.175    0.162    0.183
-## Balanced Accuracy       0.999    0.995    0.993    0.993    0.999</code></pre>
+## Detection Rate          0.284    0.192    0.173    0.163    0.183
+## Detection Prevalence    0.285    0.194    0.175    0.163    0.183
+## Balanced Accuracy       0.999    0.995    0.995    0.997    0.999</code></pre>
 </div>
 <div id="testing-set-predictions-and-courersa-submission-code" class="section level2">
 <h2>Testing Set Predictions and Courersa Submission Code</h2>
