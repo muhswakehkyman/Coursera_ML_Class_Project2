@@ -10,6 +10,7 @@ library(randomForest)
 library(Hmisc)
 library(doParallel)
 library(foreach)
+library(e1071)
  
 training <- read.csv("~/pml-training.csv",na.strings=c("#DIV/0!", "","NA") )
 testing <- read.csv("pml-testing.csv", na.strings=c("#DIV/0!", "","NA") )
@@ -53,7 +54,7 @@ randomForest(x, y, ntree=ntree)
 
 Results
 ---------------------------
-The random forest model's results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.3% accurate. We'd expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.5% and 0.9%.
+The random forest model's results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.5% accurate. We'd expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.7%.
 
 Given these results, I am satisfied with this random forest model especially given how it was optimized for run time on my computer by using only a small portion of the data set. 
 ```{r}
