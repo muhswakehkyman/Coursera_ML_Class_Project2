@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Coursera Machine Learning Class Project : Coursera Machine Learning Course Project">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Coursera Machine Learning Class Project</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/muhswakehkyman/Coursera_ML_Class_Project2">View on GitHub</a>
+
+          <h1 id="project_title">Coursera Machine Learning Class Project</h1>
+          <h2 id="project_tagline">Coursera Machine Learning Course Project</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/muhswakehkyman/Coursera_ML_Class_Project2/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/muhswakehkyman/Coursera_ML_Class_Project2/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p></p>
+
+<p></p>
+
+<p></p>
+
+<p></p><p></p>
+
+<p></p>
+
+
+  
+<p></p>
+
+<p></p>
+
+
+<div>
+
+
+
+
+<div>
+<h2>
+<a name="practical-machine-learning-course-project" class="anchor" href="#practical-machine-learning-course-project"><span class="octicon octicon-link"></span></a>Practical Machine Learning Course Project</h2>
+<p>The goal of this project was to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants and accurately predict how the lift was performed. In the data set this would be the ‘classe’ variable.</p>
+<p>When loading in the data, I replaced all fields with ‘#DIV/0!’, blanks and NA’s to be imported as R’s default N/A value.</p>
+<pre><code>library(caret)
+library(randomForest)
+library(Hmisc)
+library(doParallel)
+library(foreach)
+library(e1071)
+ 
+training &lt;- read.csv("~/pml-training.csv",na.strings=c("#DIV/0!", "","NA") )
+testing &lt;- read.csv("pml-testing.csv", na.strings=c("#DIV/0!", "","NA") )</code></pre>
+</div>
+
+<div>
+<h2>
+<a name="data-manipulation" class="anchor" href="#data-manipulation"><span class="octicon octicon-link"></span></a>Data Manipulation</h2>
+<p>The original data set includes a low of missing data. My approach to this analysis is to use a complete data set. There is a lot of information in the data set even if we exclude the non-complete portions. I also removed columns that would not be useful in predictions, such as time-stamps, windows, and user names. I also split the training set in order for cross-validation.</p>
+<pre><code>#Limiting down variables to only complete data sets
+#Remove columns with N/As
+training &lt;- training[,which(colSums(!is.na(training))==19622)]
+testing &lt;- testing[,which(colSums(!is.na(testing))==20)]
+ 
+#user names and timestamps will not help in predicting performance
+training &lt;- training[,c(8:60)]
+testing &lt;- testing[,c(8:60)]
+
+#Partition rows into training and crossvalidation
+inTrain &lt;- createDataPartition(training$classe, p = 0.6)[[1]]
+crossv &lt;- training[-inTrain,]
+training &lt;- training[ inTrain,]</code></pre>
+</div>
+
+<div>
+<h2>
+<a name="model-selection" class="anchor" href="#model-selection"><span class="octicon octicon-link"></span></a>Model Selection</h2>
+<p>I decided to cut down the training set dramatically in order to be able to use random forests on my computer. I had a lot of issues trying to run random forest models on the complete data set. In order to optimize run time of the random forest model. I only attempted 6 random forests with 40 trees each.</p>
+<pre><code>#Data cutdown for rf to process quickly
+set.seed(12345)
+training2 &lt;- training[1:300,]
+registerDoParallel()
+x &lt;- training[-ncol(training)]
+y &lt;- training$classe
+rf &lt;- foreach(ntree=rep(40, 6), .combine=randomForest::combine, .packages='randomForest') %dopar% {
+randomForest(x, y, ntree=ntree) 
+}</code></pre>
+</div>
+
+<div>
+<h2>
+<a name="results" class="anchor" href="#results"><span class="octicon octicon-link"></span></a>Results</h2>
+<p>The random forest model’s results on the training set is 100% accurate. The prediction results for the random forest model against the cross validation data set was 99.4% accurate. We’d expect an out of sample error to be within the 95% confidence interval of the prediction accuracy. Thus the out of sample error rate should be between 0.4% and 0.8%.</p>
+<p>Given these results, I am satisfied with this random forest model especially given how it was optimized for run time on my computer by using only a small portion of the data set.</p>
+<pre><code>predictions1 &lt;- predict(rf, newdata=training)
+confusionMatrix(predictions1,training$classe)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 3348    0    0    0    0
+##          B    0 2279    0    0    0
+##          C    0    0 2054    0    0
+##          D    0    0    0 1930    0
+##          E    0    0    0    0 2165
+## 
+## Overall Statistics
+##                                 
+##                Accuracy : 1     
+##                  95% CI : (1, 1)
+##     No Information Rate : 0.284 
+##     P-Value [Acc &gt; NIR] : &lt;2e-16
+##                                 
+##                   Kappa : 1     
+##  Mcnemar's Test P-Value : NA    
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity             1.000    1.000    1.000    1.000    1.000
+## Specificity             1.000    1.000    1.000    1.000    1.000
+## Pos Pred Value          1.000    1.000    1.000    1.000    1.000
+## Neg Pred Value          1.000    1.000    1.000    1.000    1.000
+## Prevalence              0.284    0.194    0.174    0.164    0.184
+## Detection Rate          0.284    0.194    0.174    0.164    0.184
+## Detection Prevalence    0.284    0.194    0.174    0.164    0.184
+## Balanced Accuracy       1.000    1.000    1.000    1.000    1.000</code></pre>
+<pre><code>predictions2 &lt;- predict(rf, newdata=crossv)
+confusionMatrix(predictions2,crossv$classe)</code></pre>
+<pre><code>## Confusion Matrix and Statistics
+## 
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 2231    7    0    0    0
+##          B    0 1505    7    0    0
+##          C    0    6 1360   12    0
+##          D    0    0    1 1272   11
+##          E    1    0    0    2 1431
+## 
+## Overall Statistics
+##                                         
+##                Accuracy : 0.994         
+##                  95% CI : (0.992, 0.996)
+##     No Information Rate : 0.284         
+##     P-Value [Acc &gt; NIR] : &lt;2e-16        
+##                                         
+##                   Kappa : 0.992         
+##  Mcnemar's Test P-Value : NA            
+## 
+## Statistics by Class:
+## 
+##                      Class: A Class: B Class: C Class: D Class: E
+## Sensitivity             1.000    0.991    0.994    0.989    0.992
+## Specificity             0.999    0.999    0.997    0.998    1.000
+## Pos Pred Value          0.997    0.995    0.987    0.991    0.998
+## Neg Pred Value          1.000    0.998    0.999    0.998    0.998
+## Prevalence              0.284    0.193    0.174    0.164    0.184
+## Detection Rate          0.284    0.192    0.173    0.162    0.182
+## Detection Prevalence    0.285    0.193    0.176    0.164    0.183
+## Balanced Accuracy       0.999    0.995    0.996    0.994    0.996</code></pre>
+</div>
+
+<div>
+<h2>
+<a name="testing-set-predictions-and-coursera-submission-code" class="anchor" href="#testing-set-predictions-and-coursera-submission-code"><span class="octicon octicon-link"></span></a>Testing Set Predictions and Coursera Submission Code</h2>
+<p>Below is the submission results using the Coursera provided code.</p>
+<pre><code>answers = predict(rf, newdata=testing)
+pml_write_files = function(x){
+  n = length(x)
+  for(i in 1:n){
+    filename = paste0("problem_id_",i,".txt")
+    write.table(x[i],file=filename,quote=FALSE,row.names=FALSE,col.names=FALSE)
+  }
+}
+pml_write_files(answers)</code></pre>
+</div>
+
+<p></p>
+</div>
+
+<p>
+</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Coursera Machine Learning Class Project maintained by <a href="https://github.com/muhswakehkyman">muhswakehkyman</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
